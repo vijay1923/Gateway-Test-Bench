@@ -1,0 +1,29 @@
+#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\mac_test.h"
+#ifndef MAC_TEST_H
+#define MAC_TEST_H
+
+#include <Arduino.h>
+#include "esp_mac.h"  // esp_read_mac api and esp_mac_type_t
+#include "esp_err.h"  // esp_err_t and ESP_OK   
+
+void mac_test()
+{
+    CHECK_ABORT();
+    uint8_t mac[6]; // Array to hold the MAC address
+    esp_err_t err = esp_read_mac(mac, ESP_MAC_WIFI_STA);  // Read MAC address for WiFi Station
+
+    if (err == ESP_OK) // Check if the read was successful
+    {
+        Serial.print("$,MAC,1,");
+        Serial.printf("%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+        Serial.println("#");
+    }
+    else
+    {
+        Serial.println("$,MAC,2,FAIL,#");
+    }
+
+    CHECK_ABORT();  
+}
+
+#endif

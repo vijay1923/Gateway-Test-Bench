@@ -1,24 +1,25 @@
 #include <Arduino.h>
 #line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
 #include "header.h" 
-char  frame[32];  // string to store received command
-int i=0;   // frame index  
-#line 4 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
+
+volatile char  frame[32];  // string to store received command
+volatile int i = 0;        // frame index  
+volatile bool frameready = false;
+
+#line 7 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
 void parseFrame(String frame );
-#line 41 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
+#line 52 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
 void cmdhandler(String cmd, int val);
-#line 111 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
-void serial_rx();
-#line 128 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
+#line 149 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
 void setup();
-#line 137 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
+#line 160 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
 void loop();
-#line 4 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
+#line 7 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
 void parseFrame(String frame ) 
 {
     frame.trim();
     // ignore responce 
-    if (!frame.startsWith("$")|| frame.indexOf("PASS") != -1 || frame.indexOf("FAIL") != -1)
+    if (!frame.startsWith("$") || frame.indexOf("PASS") != -1 || frame.indexOf("FAIL") != -1)
     {
         return;     // Skip outgoing frames 
     }
@@ -29,11 +30,19 @@ void parseFrame(String frame )
         Serial.println("ERR: Invalid Command Format");
         return;
     }
+
     // Remove "$," from start and ",#" from end
     frame = frame.substring(2, frame.length() - 2);   // extract command frame between delimiters
+
     int commaIndex = frame.indexOf(',');   // find first comma position
-    String cmd = frame.substring(0, commaIndex);   // extract periferal name  from position 0 to comma
-    String valStr = frame.substring(commaIndex + 1);  // extract value as string from next position of comma to end
+    if (commaIndex == -1)
+    {
+        Serial.println("ERR: Missing value");
+        return;
+    }
+
+    String cmd = frame.substring(0, commaIndex);   // extract periferal name
+    String valStr = frame.substring(commaIndex + 1);  // extract value
 
     // Convert value to integer
     int val = valStr.toInt();
@@ -54,11 +63,13 @@ void parseFrame(String frame )
 void cmdhandler(String cmd, int val)
 {
     cmd.toUpperCase();
+
     if (cmd == "ABORT")
     {
         abortrequested = true;
         return;
     }
+
     abortrequested = false;
 
     if (mac_executed == 0)
@@ -112,7 +123,8 @@ void cmdhandler(String cmd, int val)
         output_test();    CHECK_ABORT();
         reset_test();
     }
-    else {
+    else 
+    {
         Serial.print("$,");
         Serial.print(cmd);
         Serial.print(",");
@@ -121,34 +133,49 @@ void cmdhandler(String cmd, int val)
     }
 }
 
-void serial_rx()
+// serial receive isr 
+void IRAM_ATTR onSerialReceive() 
 {
-    while (Serial.available())
+    while (Serial.available()) 
     {
         char c = Serial.read();
-        frame[i++] = c;
-        if (c == '#') 
+
+        if (!frameready && i < sizeof(frame) - 1) 
         {
-            frame[i] = '\0';
-            parseFrame(String(frame));
-            i = 0;   
+            frame[i++] = c;
+
+            if (c == '#') 
+            {
+                frame[i] = '\0'; 
+                frameready = true;      // set flag 
+            }
+        } 
+        else
+        {
+            i = 0; // Reset if buffer fills without a '#'
         }
     }
 }
 
-
-
 void setup() 
 {
-   Serial.begin(SERIAL_BAUD, SERIAL_8N1, RX0_PIN, TX0_PIN);
-    Serial.println("Welcome ESP32-S3 Peripheral BenchTest");
-    rgb_init();  // initialize RGB
-    reset_test_init();  // initialize reset test
-}
+    Serial.begin(SERIAL_BAUD, SERIAL_8N1, RX0_PIN, TX0_PIN);
+    Serial.onReceive(onSerialReceive); // register intrrupt 
 
+    rgb_init();          // initialize RGB
+    reset_test_init();   // initialize reset test
+
+    Serial.println("Welcome ESP32-S3 : Gateway BenchTest");
+}
 
 void loop() 
 {
-    serial_rx();  /// 
-    
+    if (frameready)
+    {
+        frameready = false;        // clear flag
+        parseFrame(String((char*)frame));
+        i = 0;                    // reset index
+        memset((void*)frame, 0, sizeof(frame));  // clear buffer 
+    }
 }
+

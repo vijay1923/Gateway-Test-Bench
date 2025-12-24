@@ -66,9 +66,15 @@ const char* mqtt_pass   = "PassworD";  // MQTT Password
 char flag = 0; // to indicate mac_test only one time in all test
 char mac_executed = 0; // flag to ensure mac_test runs only once when a valid command is received
 
+// abort 
 volatile bool abortrequested = false  ; /// abort flag 
 
-#define CHECK_ABORT() if (abortrequested) return;  // Abort  macro
+#define CHECK_ABORT()                  \
+    if (abortrequested)                \
+    {                                  \
+        Serial.println("$,ABORTED,#"); \
+        return;                        \
+    }
 
 #endif
 

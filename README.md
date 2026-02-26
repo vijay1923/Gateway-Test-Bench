@@ -39,6 +39,7 @@ Format:
 
 ```
 $<PERIPHERAL>,<ACTION>#
+
 ```
 
 - `PERIPHERAL`: e.g. `WIFI`, `MQTT`, `OUTTEST`, `MAC`, `PCF`.

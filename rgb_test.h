@@ -4,7 +4,7 @@
 #include <Adafruit_NeoPixel.h>
 #include "config.h"
 
-Adafruit_NeoPixel rgb(RGB_COUNT, RGB_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel rgb(RGB_COUNT, RGB_PIN, NEO_GRB + NEO_KHZ800);   // create rgb object
 void rgb_init()
 {
     rgb.begin();

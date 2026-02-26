@@ -37,7 +37,7 @@ void mqtt_test()
     if (ok)
     {
         Serial.println("$,MQTT,1,PASS,#");  
-        mqttClient.publish(TEST_BENCH_TOPIC, "Gateway Test Bench Online");  //  Publish topic 
+        mqttClient.publish(TEST_BENCH_TOPIC, "Gateway Test Bench");  //  Publish topic 
         mqttClient.subscribe(TEST_BENCH_TOPIC);   // subscribe  to same topic 
     }
     else 

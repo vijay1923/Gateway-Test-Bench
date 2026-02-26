@@ -33,7 +33,7 @@ void wifi_test()
     } 
     else   // Failed to connect
     {
-        Serial.println("$,WIFI,2,FAIL, ERROR CODE - " + String(WiFi.status()) + ",#");  // FAIL RESPONSE   
+        Serial.println("$,WIFI,2,FAIL,ERROR CODE - " + String(WiFi.status()) + ",#");  // FAIL RESPONSE   
     }
     CHECK_ABORT();  
     delay(100);  // Short delay for next operations

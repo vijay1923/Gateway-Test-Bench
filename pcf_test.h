@@ -65,7 +65,6 @@ void pcf2_test()
     Serial.printf("$,PCF2,1,PASS,0x%02X,#\n", addr);
     else
     Serial.println("$,PCF2,2,FAIL,#");
-
     CHECK_ABORT();
     delay(100);  
 }

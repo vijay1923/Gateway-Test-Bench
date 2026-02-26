@@ -24,7 +24,7 @@
 #include "scanner_test.h"
 #include "reset_test.h"
 #include "rs232_test.h"
-#include "rs485_test.h"
 
+#include "rs485_test.h"
 
 #endif

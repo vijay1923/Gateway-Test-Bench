@@ -7,14 +7,15 @@
 bool scanReceived = false;  
 String lastBarcode = "";
 int lastLen = 0;
-// callback function
+// callback function to handle scanned barcode
 void onBarcodeScanned(const char *barcode, int length)
 {
     if (!scanReceived)            
     {
-        scanReceived = true;
-        lastBarcode = String(barcode);
-        lastLen     = length;
+        scanReceived = true;  // set flag to indicate scan received
+        lastBarcode = String(barcode);  // store scanned barcode
+        lastLen     = length;  // store barcode length
+
     }
 }
 

@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\reset_test.h"
+#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Embedsol\\Gateway_TestBenach\\periferal_testing\\reset_test.h"
 #ifndef RESET_TEST_H
 #define RESET_TEST_H    
 
@@ -18,7 +18,9 @@ void reset_test_init()
 
 void reset_test()
 {
-    CHECK_ABORT();  
+    Serial.println("Reset Test Started");
+     CHECK_ABORT();  
+     EEPROM.begin(EEPROM_SIZE);  // Initialize EEPROM with defined size 
     byte state = EEPROM.read(RESET_EEPROM_ADDR);
     if (state == RESET_ARMED)   // if prior state is armed then reset 
     {

@@ -7,6 +7,7 @@
 
 void mac_test()
 {
+    Serial.println("MAC Address Test Started");
     CHECK_ABORT();
     uint8_t mac[6]; // Array to hold the MAC address
     esp_err_t err = esp_read_mac(mac, ESP_MAC_WIFI_STA);  // Read MAC address for WiFi Station

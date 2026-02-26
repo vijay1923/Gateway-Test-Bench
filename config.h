@@ -65,6 +65,17 @@ const char* mqtt_pass   = "PassworD";  // MQTT Password
 char flag = 0; // to indicate mac_test only one time in all test
 char mac_executed = 0; // flag to ensure mac_test runs only once when a valid command is received
 
+
+/////   RS232   ///////////
+
+#define RS232_TX 17
+#define RS232_RX 35
+
+///// 485  ///////
+
+#define RS485_TX 17
+#define RS485_RX 35
+
 // abort 
 volatile bool abortrequested = false  ; /// abort flag 
 

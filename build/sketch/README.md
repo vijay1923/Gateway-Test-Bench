@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\README.md"
+#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Embedsol\\Gateway_TestBenach\\periferal_testing\\README.md"
 ## 🚜 ESP32 Peripheral BenchTest 
 
 ### 📖 Overview
@@ -20,17 +20,17 @@ Control is via a small serial command protocol (suitable for human use or automa
 
 ### 📁 File Structure & Description
 
-| File                         | Purpose                                                   |
-|------------------------------|-----------------------------------------------------------|
-| `periferal_testing.ino`      | Main sketch: serial loop, boot messages                   |
-| `config.h`                   | Pins, WiFi/MQTT settings, I2C addresses                   |
-| `command_handler.h`          | Parses serial commands and dispatches to tests            |
-| `wifi_test.h`                | WiFi connect test (prints success/failure)                |
-| `mqtt_test.h`                | MQTT connect/publish check                                |
-| `pcf_test.h`                 | PCF8574 input/output checks                               |
-| `rgb_test.h`                 | WS2812 LED test                                           |
-| `input_test.h`               | Input Test                                                 |
-| `output_test.h`              | Output test  tests                                        |
+| File                         | Purpose                                         |
+|------------------------------|-------------------------------------------------|
+| `periferal_testing.ino`      | Main sketch: serial loop, boot messages         |
+| `config.h`                   | Pins, WiFi/MQTT settings, I2C addresses         |
+| `command_handler.h`          | Parses serial commands and dispatches to tests  |
+| `wifi_test.h`                | WiFi connect test (prints success/failure)      |
+| `mqtt_test.h`                | MQTT connect/publish check                      |
+| `pcf_test.h`                 | PCF8574 input/output checks                     |
+| `rgb_test.h`                 | WS2812 LED test                                 |
+| `input_test.h`               | Input Test                                      |
+| `output_test.h`              | Output test  tests                              |
 
 ### 🔁 Serial Command Protocol
 

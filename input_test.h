@@ -9,6 +9,7 @@ bool io_passed[8] = {false,false,false,false,false,false,false,false};
 
 void input_test()
 {
+    Serial.println("Input test started - Press each button one by one");
     CHECK_ABORT();  // check before test 
 
     Wire.begin(I2C_SDA, I2C_SCL);   // inditilizing I2C Bus 

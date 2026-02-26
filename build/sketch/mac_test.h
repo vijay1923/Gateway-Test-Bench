@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\mac_test.h"
+#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Embedsol\\Gateway_TestBenach\\periferal_testing\\mac_test.h"
 #ifndef MAC_TEST_H
 #define MAC_TEST_H
 
@@ -8,6 +8,7 @@
 
 void mac_test()
 {
+    Serial.println("MAC Address Test Started");
     CHECK_ABORT();
     uint8_t mac[6]; // Array to hold the MAC address
     esp_err_t err = esp_read_mac(mac, ESP_MAC_WIFI_STA);  // Read MAC address for WiFi Station

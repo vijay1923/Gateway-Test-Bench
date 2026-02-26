@@ -6,6 +6,7 @@
 
 void output_test()
 {
+    Serial.println("output test started ");
     CHECK_ABORT();  
     Wire.begin(I2C_SDA, I2C_SCL);  // initilizing I2C Bus 
     delay(100);

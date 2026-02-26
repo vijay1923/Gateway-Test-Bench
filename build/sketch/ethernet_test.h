@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\ethernet_test.h"
+#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Embedsol\\Gateway_TestBenach\\periferal_testing\\ethernet_test.h"
 #ifndef ETHERNET_TEST_H
 #define ETHERNET_TEST_H
 
@@ -14,6 +14,7 @@ byte macAddr[] =
 
 void ethernet_test() 
 { 
+    Serial.println("Ethernet Test Started");
      CHECK_ABORT();  // check before test 
 
     SPI.begin();

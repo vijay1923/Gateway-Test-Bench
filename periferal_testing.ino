@@ -99,6 +99,12 @@ void cmdhandler(String cmd, int val)
         rtc_test();
     else if (cmd == "RESET")
         reset_test();
+    else if(cmd=="SCANNER")
+    scanner_test();
+    else if(cmd=="S232")
+    rs232_test();
+    else if(cmd=="S485")
+    rs485_test();
     else if (cmd == "ALL") 
     {
         rgb_test();       CHECK_ABORT();
@@ -150,6 +156,7 @@ void setup()
 {
     Serial.begin(SERIAL_BAUD, SERIAL_8N1, RX0_PIN, TX0_PIN);
     Serial.onReceive(onSerialReceive); // register intrrupt 
+    delay(3000); 
 
     rgb_init();          // initialize RGB
     reset_test_init();   // initialize reset test
@@ -163,7 +170,7 @@ void loop()
     {
         frameready = false;        // clear flag
         parseFrame(String((char*)frame));
-        i = 0;                    // reset index
+        i = 0;                    // reset index of buffer
         memset((void*)frame, 0, sizeof(frame));  // clear buffer 
     }
 }

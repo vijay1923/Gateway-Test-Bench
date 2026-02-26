@@ -10,7 +10,8 @@ RTC_DS3231 rtc;   // rtc object
 
 void rtc_test()
 {
-    CHECK_ABORT();  
+    Serial.println("RTC Test Started");
+     CHECK_ABORT();
     if (WiFi.status() != WL_CONNECTED) 
         wifi_test();  
 

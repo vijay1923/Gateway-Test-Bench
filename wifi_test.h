@@ -7,11 +7,12 @@
 // Function to START WiFi test
 void wifi_test() 
 {
-    CHECK_ABORT();  
+    Serial.println("WiFi Test Started");
+    CHECK_ABORT();  // check before test 
     // if wifi is already connected skip the test 
     if (WiFi.status() == WL_CONNECTED)
     {
-        Serial.println("$,WIFI,1,PASS,ALREADY CONNECTED TO " + WiFi.localIP().toString() + ",#");  /// send responce 
+        Serial.println("$,WIFI,1,PASS,ALREADY CONNECTED TO ," + WiFi.localIP().toString() + ",#");  /// send responce 
         return;
     }
 
@@ -20,6 +21,7 @@ void wifi_test()
     delay(1000);
 
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);  // Connect to the specified SSID
+    delay(1000);
 
     // Wait for connection with timeout
     unsigned long start = millis();
@@ -27,11 +29,11 @@ void wifi_test()
 
     if (WiFi.status() == WL_CONNECTED)   // Connected successfully
     {
-        Serial.println("$,WIFI,1,PASS  " + WiFi.localIP().toString() + ",#");  /// PASS RESPONSE 
+        Serial.println("$,WIFI,1,PASS," + WiFi.localIP().toString() + ",#");  /// PASS RESPONSE 
     } 
     else   // Failed to connect
     {
-        Serial.println("$,WIFI,2,FAIL, ERROR CODE - " + String(WiFi.status()) + ",#");  // FAIL RESPONSE
+        Serial.println("$,WIFI,2,FAIL, ERROR CODE - " + String(WiFi.status()) + ",#");  // FAIL RESPONSE   
     }
     CHECK_ABORT();  
     delay(100);  // Short delay for next operations

@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\rtc_test.h"
+#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Embedsol\\Gateway_TestBenach\\periferal_testing\\rtc_test.h"
 #ifndef RTC_TEST_H
 #define RTC_TEST_H
 
@@ -11,7 +11,8 @@ RTC_DS3231 rtc;   // rtc object
 
 void rtc_test()
 {
-    CHECK_ABORT();  
+    Serial.println("RTC Test Started");
+     CHECK_ABORT();
     if (WiFi.status() != WL_CONNECTED) 
         wifi_test();  
 

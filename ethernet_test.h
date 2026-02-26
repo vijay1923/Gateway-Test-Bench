@@ -13,6 +13,7 @@ byte macAddr[] =
 
 void ethernet_test() 
 { 
+    Serial.println("Ethernet Test Started");
      CHECK_ABORT();  // check before test 
 
     SPI.begin();

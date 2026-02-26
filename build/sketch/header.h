@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\header.h"
+#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Embedsol\\Gateway_TestBenach\\periferal_testing\\header.h"
 #ifndef HEADER_H
 #define HEADER_H
 
@@ -22,7 +22,7 @@
 #include "mac_test.h"
 #include "ethernet_test.h"
 #include "rtc_test.h"
-//#include "scanner_test.h"
+#include "scanner_test.h"
 #include "reset_test.h"
 
 

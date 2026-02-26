@@ -13,6 +13,7 @@ PubSubClient mqttClient(wifiClient);
 
 void mqtt_test()
 {
+    Serial.println("MQTT Test Started");
     CHECK_ABORT();  
     if (WiFi.status() != WL_CONNECTED)   // check wifi is connected or not 
     wifi_test();  

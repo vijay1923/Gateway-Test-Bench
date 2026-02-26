@@ -9,6 +9,7 @@
 
 void pcf1_test()
 {
+    Serial.println("PCF 1 test started ");
     CHECK_ABORT();  
     Wire.begin(I2C_SDA, I2C_SCL);
 
@@ -40,6 +41,7 @@ void pcf1_test()
 
 void pcf2_test()
 {
+    Serial.println("PCF 2 test started ");
     CHECK_ABORT();  
     Wire.begin(I2C_SDA, I2C_SCL);
 

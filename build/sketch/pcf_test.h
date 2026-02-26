@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\pcf_test.h"
+#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Embedsol\\Gateway_TestBenach\\periferal_testing\\pcf_test.h"
 #ifndef PCF_TEST_H
 #define PCF_TEST_H
 
@@ -10,6 +10,7 @@
 
 void pcf1_test()
 {
+    Serial.println("PCF 1 test started ");
     CHECK_ABORT();  
     Wire.begin(I2C_SDA, I2C_SCL);
 
@@ -41,6 +42,7 @@ void pcf1_test()
 
 void pcf2_test()
 {
+    Serial.println("PCF 2 test started ");
     CHECK_ABORT();  
     Wire.begin(I2C_SDA, I2C_SCL);
 

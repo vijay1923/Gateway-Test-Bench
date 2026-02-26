@@ -21,7 +21,9 @@ bool showColor(uint8_t r, uint8_t g, uint8_t b)
 
 void rgb_test()
 {
-    CHECK_ABORT();  
+    Serial.println("RGB Test Started");
+     CHECK_ABORT();
+     
     bool pass = true;
 
     // RED

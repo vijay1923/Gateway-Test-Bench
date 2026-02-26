@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\output_test.h"
+#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Embedsol\\Gateway_TestBenach\\periferal_testing\\output_test.h"
 #ifndef OUTPUT_TEST_H
 #define OUTPUT_TEST_H   
 
@@ -7,6 +7,7 @@
 
 void output_test()
 {
+    Serial.println("output test started ");
     CHECK_ABORT();  
     Wire.begin(I2C_SDA, I2C_SCL);  // initilizing I2C Bus 
     delay(100);

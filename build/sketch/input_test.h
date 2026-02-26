@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\input_test.h"
+#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Embedsol\\Gateway_TestBenach\\periferal_testing\\input_test.h"
 #ifndef IO_TEST_H
 #define IO_TEST_H
 
@@ -10,6 +10,7 @@ bool io_passed[8] = {false,false,false,false,false,false,false,false};
 
 void input_test()
 {
+    Serial.println("Input test started - Press each button one by one");
     CHECK_ABORT();  // check before test 
 
     Wire.begin(I2C_SDA, I2C_SCL);   // inditilizing I2C Bus 

@@ -1,55 +1,56 @@
-// #ifndef SCANNER_TEST_H
-// #define SCANNER_TEST_H
+#ifndef SCANNER_TEST_H
+#define SCANNER_TEST_H
 
-// #include <Arduino.h>
-// #include <usb_scanner_Lib.h>
+#include <Arduino.h>
+#include <usb_scanner_Lib.h>
 
-// bool scanReceived = false;  
-// String lastBarcode = "";
-// int lastLen = 0;
-// // callback function
-// void onBarcodeScanned(const char *barcode, int length)
-// {
-//     if (!scanReceived)            
-//     {
-//         scanReceived = true;
-//         lastBarcode = String(barcode);
-//         lastLen     = length;
-//     }
-// }
+bool scanReceived = false;  
+String lastBarcode = "";
+int lastLen = 0;
+// callback function
+void onBarcodeScanned(const char *barcode, int length)
+{
+    if (!scanReceived)            
+    {
+        scanReceived = true;
+        lastBarcode = String(barcode);
+        lastLen     = length;
+    }
+}
 
-// void scanner_test()
-// {
+void scanner_test()
+{
+   Serial.println("Scanner Test Started");
    
- //       CHECK_ABORT();  
-//     scanReceived = false;
-//     lastBarcode  = "";
-//     lastLen      = 0;
+       CHECK_ABORT();  
+    scanReceived = false;
+    lastBarcode  = "";
+    lastLen      = 0;
 
-//     usb_scannerInit();
-//     set_barcode_callback(onBarcodeScanned);
+    usb_scannerInit();
+    set_barcode_callback(onBarcodeScanned);
 
-//     unsigned long start = millis();
-//     while (millis() - start < 5000)
-//     {
-//         if (scanReceived)
-//             break;
-//     }
+    unsigned long start = millis();
+    while (millis() - start < 5000)
+    {
+        if (scanReceived)
+            break;
+    }
 
-//     if (scanReceived)
-//     {
-//         Serial.print("$,SCANNER,1,PASS,");
-//         Serial.print(lastBarcode);
-//         Serial.print(",LEN=");
-//         Serial.print(lastLen);
-//         Serial.println(",#");
-//     }
-//     else
-//     {
-//         Serial.println("$,SCANNER,2,FAIL,#");
-//     }
+    if (scanReceived)
+    {
+        Serial.print("$,SCANNER,1,PASS,");
+        Serial.print(lastBarcode);
+        Serial.print(",LEN=");
+        Serial.print(lastLen);
+        Serial.println(",#");
+    }
+    else
+    {
+        Serial.println("$,SCANNER,2,FAIL,#");
+    }
 
-//    CHECK_ABORT();  
-// }
+   CHECK_ABORT();  
+}
 
-// #endif
+#endif

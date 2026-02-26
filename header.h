@@ -21,8 +21,10 @@
 #include "mac_test.h"
 #include "ethernet_test.h"
 #include "rtc_test.h"
-//#include "scanner_test.h"
+#include "scanner_test.h"
 #include "reset_test.h"
+#include "rs232_test.h"
+#include "rs485_test.h"
 
 
 #endif

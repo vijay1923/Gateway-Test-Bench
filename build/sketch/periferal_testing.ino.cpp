@@ -1,20 +1,11 @@
 #include <Arduino.h>
-#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
+#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Embedsol\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
 #include "header.h" 
 
 volatile char  frame[32];  // string to store received command
 volatile int i = 0;        // frame index  
 volatile bool frameready = false;
 
-#line 7 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
-void parseFrame(String frame );
-#line 52 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
-void cmdhandler(String cmd, int val);
-#line 149 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
-void setup();
-#line 160 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
-void loop();
-#line 7 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\periferal_testing.ino"
 void parseFrame(String frame ) 
 {
     frame.trim();
@@ -110,6 +101,8 @@ void cmdhandler(String cmd, int val)
         rtc_test();
     else if (cmd == "RESET")
         reset_test();
+    else if(cmd=="SCANNER")
+    scanner_test();
     else if (cmd == "ALL") 
     {
         rgb_test();       CHECK_ABORT();
@@ -146,7 +139,7 @@ void IRAM_ATTR onSerialReceive()
 
             if (c == '#') 
             {
-                frame[i] = '\0'; 
+                frame[i]='\0';
                 frameready = true;      // set flag 
             }
         } 
@@ -161,6 +154,7 @@ void setup()
 {
     Serial.begin(SERIAL_BAUD, SERIAL_8N1, RX0_PIN, TX0_PIN);
     Serial.onReceive(onSerialReceive); // register intrrupt 
+    delay(3000); 
 
     rgb_init();          // initialize RGB
     reset_test_init();   // initialize reset test

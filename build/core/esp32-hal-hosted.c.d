@@ -1,3 +1,3 @@
-C:\Users\Shree\Documents\Arduino\Gateway_TestBenach\periferal_testing\build\core\esp32-hal-hosted.c.o: \
- C:\Users\Shree\AppData\Local\Arduino15\packages\esp32\hardware\esp32\3.3.4\cores\esp32\esp32-hal-hosted.c \
- C:\Users\Shree\AppData\Local\Arduino15\packages\esp32\tools\esp32-arduino-libs\idf-release_v5.5-8410210c-v2\esp32s3/qio_qspi/include/sdkconfig.h
+C:\Users\Shree\Documents\Arduino\Embedsol\Gateway_TestBenach\periferal_testing\build\core\esp32-hal-hosted.c.o: \
+ C:\Users\Shree\AppData\Local\Arduino15\packages\esp32\hardware\esp32\3.3.6\cores\esp32\esp32-hal-hosted.c \
+ C:\Users\Shree\AppData\Local\Arduino15\packages\esp32\tools\esp32s3-libs\3.3.6/qio_qspi/include/sdkconfig.h

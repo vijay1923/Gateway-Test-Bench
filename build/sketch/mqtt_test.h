@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Gateway_TestBenach\\periferal_testing\\mqtt_test.h"
+#line 1 "C:\\Users\\Shree\\Documents\\Arduino\\Embedsol\\Gateway_TestBenach\\periferal_testing\\mqtt_test.h"
 #ifndef MQTT_TEST_H
 #define MQTT_TEST_H
 
@@ -14,6 +14,7 @@ PubSubClient mqttClient(wifiClient);
 
 void mqtt_test()
 {
+    Serial.println("MQTT Test Started");
     CHECK_ABORT();  
     if (WiFi.status() != WL_CONNECTED)   // check wifi is connected or not 
     wifi_test();  

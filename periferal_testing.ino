@@ -170,7 +170,7 @@ void loop()
     {
         frameready = false;        // clear flag
         parseFrame(String((char*)frame));
-        i = 0;                    // reset index of buffer
+        i=0;                    // reset index of buffer
         memset((void*)frame, 0, sizeof(frame));  // clear buffer 
     }
 }

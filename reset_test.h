@@ -24,7 +24,7 @@ void reset_test()
     if (state == RESET_ARMED)   // if prior state is armed then reset 
     {
         Serial.println("$,RESET,1,PASS,#");
-        delay(500);
+        delay(400);
         ESP.restart();
     }
     else

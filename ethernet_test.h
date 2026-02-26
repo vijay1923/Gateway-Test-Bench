@@ -21,11 +21,11 @@ void ethernet_test()
 
     if (Ethernet.begin(macAddr) == 0)  // DHCP fail
     {
-        Serial.println("$,ETHERNET,2,FAIL,DHCP FAIL,#");
+        Serial.println("$,ETHERNET,2,FAIL,DHCP FAIL,#");  /// send fail responce
         return;
     }
      delay(200);
-    if (Ethernet.linkStatus() == LinkON)    
+    if (Ethernet.linkStatus() == LinkON)    // check for link status
     {
         IPAddress ip = Ethernet.localIP();
 

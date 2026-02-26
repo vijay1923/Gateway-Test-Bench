@@ -57,7 +57,7 @@ void rtc_test()
     if (diff >= 5) // respond passs with current time
     Serial.printf("$,RTC,1,PASS,%02d:%02d:%02d,#\n",t2.hour(), t2.minute(), t2.second());
     else
-    Serial.println("$,RTC,2,FAIL,RTC TIME NOT INCREASING,#");
+    Serial.println("$,RTC,2,FAIL,RTC NOT WORKING,#");
 
     CHECK_ABORT(); 
     delay(100);

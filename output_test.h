@@ -67,7 +67,7 @@ void output_test()
 
     // Reset all outputs LOW after test
     Wire.beginTransmission(PCF2_ADDR);   // pcf2 of output expander
-    Wire.write(0x00);
+    Wire.write(0x00);  // all outputs LOW
     Wire.endTransmission();
     CHECK_ABORT();  
 }

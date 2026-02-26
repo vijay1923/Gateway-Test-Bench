@@ -5,7 +5,7 @@
 #include "config.h"
 
 
-bool io_passed[8] = {false,false,false,false,false,false,false,false};  
+bool io_passed[8] = {false,false,false,false,false,false,false,false};   // bool array to track passed inputs
 
 void input_test()
 {
@@ -48,7 +48,7 @@ void input_test()
                         io_passed[i] = true;
                         completed++;
 
-                        delay(400);  // debounce time
+                        delay(200);  // debounce time
                     }
                 }
                 CHECK_ABORT(); 

@@ -10,10 +10,15 @@ Control is via a small serial command protocol (suitable for human use or automa
 
 | Library Name       | Purpose                                          |
 |--------------------|--------------------------------------------------|
-| `WiFi`             | WiFi connectivity (ESP32)                        |
+| `WiFi`             | WiFi connectivity                                |
 | `PubSubClient`     | MQTT client when testing MQTT connectivity       |
 | `Wire`             | I2C for PCF8574 tests                            |
 | `Adafruit_NeoPixel`| WS2812 / RGB control                             |
+| `Ethernet`         | Ethernet connectivity                            |
+| `RTClib`           | Real-time clock (RTC) functionality              |
+| `Adafruit_BusIO`   | I2C/SPI abstraction layer (Adafruit utility)     |
+| `EEPROM`           | ESP32 EEPROM for data persistence                |
+| `usb_scanner_Lib`  | USB barcode scanner interface                    |
 | `Arduino`          | Core Arduino APIs                                |
 
 
@@ -22,14 +27,21 @@ Control is via a small serial command protocol (suitable for human use or automa
 | File                         | Purpose                                         |
 |------------------------------|-------------------------------------------------|
 | `periferal_testing.ino`      | Main sketch: serial loop, boot messages         |
+| `header.h`                   | Main header: includes all libraries and tests    |
 | `config.h`                   | Pins, WiFi/MQTT settings, I2C addresses         |
-| `command_handler.h`          | Parses serial commands and dispatches to tests  |
-| `wifi_test.h`                | WiFi connect test (prints success/failure)      |
-| `mqtt_test.h`                | MQTT connect/publish check                      |
-| `pcf_test.h`                 | PCF8574 input/output checks                     |
-| `rgb_test.h`                 | WS2812 LED test                                 |
-| `input_test.h`               | Input Test                                      |
-| `output_test.h`              | Output test  tests                              |
+| `wifi_test.h`                | WiFi connectivity test                          |
+| `mqtt_test.h`                | MQTT connect/publish test                       |
+| `ethernet_test.h`            | Ethernet connectivity test                      |
+| `pcf_test.h`                 | PCF8574 I/O expander test                       |
+| `rgb_test.h`                 | WS2812 RGB LED test                             |
+| `input_test.h`               | Input pins test                                 |
+| `output_test.h`              | Output pins test                                |
+| `mac_test.h`                 | MAC address test                                |
+| `rtc_test.h`                 | Real-time clock test                            |
+| `scanner_test.h`             | Barcode scanner test                            |
+| `reset_test.h`               | EEPROM reset/restart test                       |
+| `rs232_test.h`               | RS232 serial communication test                 |
+| `rs485_test.h`               | RS485 serial communication test                 |
 
 ### 🔁 Serial Command Protocol
 
@@ -50,7 +62,17 @@ Examples:
 ```
 $<WIFI>,<1>#       // start WiFi test
 $<MQTT>,<1>#       // run MQTT connect test
-$<OUTPUT>,<1>#    // run output pins test
+$<ETHERNET>,<1>#   // start Ethernet test
+$<PCF>,<1>#        // run PCF8574 I/O test
+$<RGB>,<1>#        // run RGB LED test
+$<INPUT>,<1>#      // run input pins test
+$<OUTPUT>,<1>#     // run output pins test
+$<MAC>,<1>#        // run MAC address test
+$<RTC>,<1>#        // run RTC test
+$<SCANNER>,<1>#    // run barcode scanner test
+$<RESET>,<1>#      // run reset test
+$<RS232>,<1>#      // run RS232 test
+$<RS485>,<1>#      // run RS485 test
 ```
 
 ### 🖨️ Serial Output — Example

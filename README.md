@@ -12,7 +12,7 @@ Control is via a small serial command protocol (suitable for human use or automa
 |--------------------|--------------------------------------------------|
 | `WiFi`             | WiFi connectivity                                |
 | `PubSubClient`     | MQTT client when testing MQTT connectivity       |
-| `Wire`             | I2C for PCF8574 tests                            |
+| `Wire`             | I2C for PCF8574 tests                            | 
 | `Adafruit_NeoPixel`| WS2812 / RGB control                             |
 | `Ethernet`         | Ethernet connectivity                            |
 | `RTClib`           | Real-time clock (RTC) functionality              |
@@ -86,5 +86,24 @@ $<WIFI>,<1>,<CONNECTED TO 192.168.1.42>#
 $<MQTT>,<1>,<MQTT SERVER CONNECTED,0>#
 $<PCF>,<1>,<INPUTS: 0x12>#
 ```
+
+### 📋 Command & Response Reference Table
+
+| Peripheral  | Commands          | Pass Response                     | Fail Response                     |
+|-------------|-------------------|-----------------------------------|-----------------------------------|
+| WiFi        | `$<WIFI>,<1>#`    | `$<WIFI>,<1>,<PASS,MESSAGE>#`     | `$<WIFI>,<2>,<FAIL,MESSAGE>#`     |
+| MQTT        | `$<MQTT>,<1>#`    | `$<MQTT>,<1>,<PASS,MESSAGE>#`     | `$<MQTT>,<2>,<FAIL,MESSAGE>#`     |
+| Ethernet    | `$<ETHERNET>,<1>#`| `$<ETHERNET>,<1>,<PASS,MESSAGE>#` | `$<ETHERNET>,<2>,<FAIL,MESSAGE>#` |
+| PCF8574  1  | `$<PCF1>,<1>#`    | `$<PCF1>,<1>,<PASS,MESSAGE>#`     | `$<PCF1>,<2>,<FAIL,MESSAGE>#`     |
+| PCF8574  2  | `$<PCF2>,<1>#`    | `$<PCF2>,<1>,<PASS,MESSAGE>#`     | `$<PCF2>,<2>,<FAIL,MESSAGE>#`     |
+| RGB LED     | `$<RGB>,<1>#`     | `$<RGB>,<1>,<PASS,MESSAGE>#`      | `$<RGB>,<2>,<FAIL,MESSAGE>#`      |
+| Input Pins  | `$<INPUT>,<1>#`   | `$<INPUT>,<1>,<PASS,MESSAGE>#`    | `$<INPUT>,<2>,<FAIL,MESSAGE>#`    |
+| Output Pins | `$<OUTPUT>,<1>#`  | `$<OUTPUT>,<1>,<PASS,MESSAGE>#`   | `$<OUTPUT>,<2>,<FAIL,MESSAGE>#`   |
+| MAC Address | `$<MAC>,<1>#`     | `$<MAC>,<1>,<PASS,MESSAGE>#`      | `$<MAC>,<2>,<FAIL,MESSAGE>#`      |
+| RTC         | `$<RTC>,<1>#`     | `$<RTC>,<1>,<PASS,MESSAGE>#`      | `$<RTC>,<2>,<FAIL,MESSAGE>#`      |
+| Scanner     | `$<SCANNER>,<1>#` | `$<SCANNER>,<1>,<PASS,MESSAGE>#`  | `$<SCANNER>,<2>,<FAIL,MESSAGE>#`  |
+| Reset       | `$<RESET>,<1>#`   | `$<RESET>,<1>,<PASS,MESSAGE>#`    | `$<RESET>,<2>,<FAIL,MESSAGE>#`    |
+| RS232       | `$<RS232>,<1>#`   | `$<RS232>,<1>,<PASS,MESSAGE>#`    | `$<RS232>,<2>,<FAIL,MESSAGE>#`    |
+| RS485       | `$<RS485>,<1>#`   | `$<RS485>,<1>,<PASS,MESSAGE>#`    | `$<RS485>,<2>,<FAIL,MESSAGE>#`    |
 
 ---

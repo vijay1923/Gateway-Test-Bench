@@ -101,10 +101,12 @@ void cmdhandler(String cmd, int val)
         reset_test();
     else if(cmd=="SCANNER")
     scanner_test();
-    else if(cmd=="S232")
+    else if(cmd=="RS232")
     rs232_test();
-    else if(cmd=="S485")
+    else if(cmd=="RS485")
     rs485_test();
+    else if(cmd=="UART2")
+    uart2_test();
     else if (cmd == "ALL") 
     {
         rgb_test();       CHECK_ABORT();
@@ -116,7 +118,10 @@ void cmdhandler(String cmd, int val)
         pcf2_test();      CHECK_ABORT();
         input_test();     CHECK_ABORT();
         output_test();    CHECK_ABORT();
-        reset_test();
+        uart2_test();     CHECK_ABORT();
+        rs232_test();     CHECK_ABORT();
+        rs485_test();     CHECK_ABORT();   
+        reset_test();     CHECK_ABORT();
     }
     else 
     {

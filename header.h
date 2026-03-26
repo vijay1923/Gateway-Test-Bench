@@ -8,6 +8,7 @@
 #include <Wire.h>
 #include <Adafruit_NeoPixel.h>
 #include <EEPROM.h>
+#include <ModbusMaster.h>
 
 
 // Project Configuration & Test Headers
@@ -24,7 +25,7 @@
 #include "scanner_test.h"
 #include "reset_test.h"
 #include "rs232_test.h"
-
+#include "uart2_test.h"
 #include "rs485_test.h"
 
 #endif

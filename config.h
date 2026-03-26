@@ -76,6 +76,12 @@ char mac_executed = 0; // flag to ensure mac_test runs only once when a valid co
 #define RS485_TX 17
 #define RS485_RX 35
 
+
+////////////  UART 2 (HMI) ///////////
+
+#define UART2_TX 37
+#define UART2_RX 36
+
 // abort 
 volatile bool abortrequested = false  ; /// abort flag 
 

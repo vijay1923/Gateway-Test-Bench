@@ -159,9 +159,8 @@ void IRAM_ATTR onSerialReceive()
 
 void setup() 
 {
-    Serial.begin(SERIAL_BAUD, SERIAL_8N1, RX0_PIN, TX0_PIN);
-    Serial.onReceive(onSerialReceive); // register intrrupt 
-    delay(3000); 
+    Serial.begin(SERIAL_BAUD);
+    delay(2000); 
 
     rgb_init();          // initialize RGB
     reset_test_init();   // initialize reset test
@@ -171,6 +170,8 @@ void setup()
 
 void loop() 
 {
+    onSerialReceive(); // poll serial input (USB CDC has no onReceive callback)
+
     if (frameready)
     {
         frameready = false;        // clear flag

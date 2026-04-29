@@ -9,12 +9,12 @@ void output_test()
     Serial.println("output test started ");
     CHECK_ABORT();  
     Wire.begin(I2C_SDA, I2C_SCL);  // initilizing I2C Bus 
-    delay(100);
+    ABORTABLE_DELAY(100);
 
     Wire.beginTransmission(PCF2_ADDR);  
     Wire.write(0x00);  // all outputs LOW
     Wire.endTransmission();  // Send data
-    delay(100);
+    ABORTABLE_DELAY(100);
 
     bool io_passed[8] = {false,false,false,false,false,false,false,false};  // Track passed outputs
 
@@ -51,7 +51,7 @@ void output_test()
                     break;
                 }
             }
-            delay(50);
+            ABORTABLE_DELAY(50);
             CHECK_ABORT(); 
         }
         
@@ -62,7 +62,7 @@ void output_test()
             Serial.println(",2,FAIL,#");
         }
         CHECK_ABORT(); 
-        delay(200); // delay for next output
+        ABORTABLE_DELAY(200); // delay for next output
     }
 
     // Reset all outputs LOW after test

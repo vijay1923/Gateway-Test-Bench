@@ -71,7 +71,7 @@ char mac_executed = 0; // flag to ensure mac_test runs only once when a valid co
 #define RS232_TX 17
 #define RS232_RX 35
 
-///// 485  ///////
+///// RS485  ///////
 
 #define RS485_TX 17
 #define RS485_RX 35
@@ -82,15 +82,54 @@ char mac_executed = 0; // flag to ensure mac_test runs only once when a valid co
 #define UART2_TX 37
 #define UART2_RX 36
 
-// abort 
-volatile bool abortrequested = false  ; /// abort flag 
 
-#define CHECK_ABORT()                  \
-    if (abortrequested)                \
+
+////////////////  SPIFFS  ////////////
+#define SPIFFS_TEST_FILE "/spiffs_test.txt"
+#define SPIFFS_TEST_CONTENT "SPIFFS Test Successful!"
+
+
+//////////// LittleFS  ////////////
+#define LITTLEFS_TEST_FILE "/littlefs_test.txt"
+#define LITTLEFS_TEST_CONTENT "LittleFS Test Successful!"
+
+// abort 
+extern volatile bool abortrequested;   /// abort flag 
+extern volatile bool abortresponsesent;
+extern volatile bool testrunning;
+extern const char* currenttestname;
+
+void serviceAbortCommand();
+bool cooperativeDelay(unsigned long durationMs);
+void beginTestExecution();
+void endTestExecution();
+void setCurrentTest(const char* testName);
+
+#define CHECK_ABORT()                      \
+    do                                     \
+    {                                      \
+        serviceAbortCommand();             \
+        if (abortrequested)                \
+        {                                  \
+            if (!abortresponsesent)        \
+            {                              \
+                Serial.print("$,ABORTED,"); \
+                Serial.print(currenttestname); \
+                Serial.println(",#"); \
+                abortresponsesent = true;  \
+            }                              \
+            return;                        \
+        }                                  \
+    } while (0)
+
+#define ABORTABLE_DELAY(ms)            \
+    do                                 \
     {                                  \
-        Serial.println("$,ABORTED,#"); \
-        return;                        \
-    }
+        if (cooperativeDelay(ms))      \
+        {                              \
+            return;                    \
+        }                              \
+    } while (0)
 
 #endif
 

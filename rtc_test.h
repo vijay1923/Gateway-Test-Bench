@@ -16,7 +16,7 @@ void rtc_test()
         wifi_test();  
 
     Wire.begin(I2C_SDA, I2C_SCL);
-    delay(100);
+    ABORTABLE_DELAY(100);
 
     if (!rtc.begin())
     {
@@ -48,7 +48,7 @@ void rtc_test()
     rtc.adjust(ntpTime);
 
     DateTime t1 = rtc.now();
-    delay(5000);
+    ABORTABLE_DELAY(5000);
     DateTime t2 = rtc.now();
 
     int diff = t2.second() - t1.second();
@@ -60,7 +60,7 @@ void rtc_test()
     Serial.println("$,RTC,2,FAIL,RTC NOT WORKING,#");
 
     CHECK_ABORT(); 
-    delay(100);
+    ABORTABLE_DELAY(100);
     
 }
 

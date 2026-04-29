@@ -9,6 +9,8 @@
 #include <Adafruit_NeoPixel.h>
 #include <EEPROM.h>
 #include <ModbusMaster.h>
+#include <SPIFFS.h>
+#include <LittleFS.h>
 
 
 // Project Configuration & Test Headers
@@ -27,5 +29,6 @@
 #include "rs232_test.h"
 #include "uart2_test.h"
 #include "rs485_test.h"
+#include "filesystem_test.h"
 
 #endif

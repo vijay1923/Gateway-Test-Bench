@@ -36,7 +36,7 @@ void pcf1_test()
     Serial.println("$,PCF1,2,FAIL,#");
 
     CHECK_ABORT(); 
-    delay(100);     
+    ABORTABLE_DELAY(100);     
 }
 
 void pcf2_test()
@@ -45,7 +45,7 @@ void pcf2_test()
     CHECK_ABORT();  
     Wire.begin(I2C_SDA, I2C_SCL);
 
-    bool foundPCF2 = false;
+    bool foundPCF2 = false;  // flag to indicate found or not
     uint8_t addr;
     // Scan I2C for PCF2
     for ( addr = 1; addr < 127; addr++)
@@ -66,7 +66,7 @@ void pcf2_test()
     else
     Serial.println("$,PCF2,2,FAIL,#");
     CHECK_ABORT();
-    delay(100);  
+    ABORTABLE_DELAY(100);  
 }
 
 #endif

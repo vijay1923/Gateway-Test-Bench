@@ -23,7 +23,7 @@ void scanner_test()
 {
    Serial.println("Scanner Test Started");
    
-       CHECK_ABORT();  
+    CHECK_ABORT();  
     scanReceived = false;
     lastBarcode  = "";
     lastLen      = 0;
@@ -34,8 +34,11 @@ void scanner_test()
     unsigned long start = millis();
     while (millis() - start < 5000)
     {
+        CHECK_ABORT();
         if (scanReceived)
             break;
+
+        ABORTABLE_DELAY(10);
     }
 
     if (scanReceived)

@@ -24,7 +24,7 @@ void ethernet_test()
         Serial.println("$,ETHERNET,2,FAIL,DHCP FAIL,#");  /// send fail responce
         return;
     }
-     delay(200);
+     ABORTABLE_DELAY(200);
     if (Ethernet.linkStatus() == LinkON)    // check for link status
     {
         IPAddress ip = Ethernet.localIP();
@@ -37,7 +37,7 @@ void ethernet_test()
     }
 
      CHECK_ABORT();  // ceck aftre test
-     delay(100);
+    ABORTABLE_DELAY(100);
 }
 
 #endif

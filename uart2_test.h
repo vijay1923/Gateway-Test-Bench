@@ -13,7 +13,11 @@ void uart2_test()
     Serial2.println("UART2 Test Message");
 
     unsigned long start = millis();
-    while (Serial2.available() == 0 && millis() - start < 5000) {} 
+    while (Serial2.available() == 0 && millis() - start < 5000)
+    {
+        CHECK_ABORT();
+        ABORTABLE_DELAY(10);
+    }
     if (Serial2.available() > 0)   // Response received
     {
         String response = Serial2.readStringUntil('\n');  
@@ -23,6 +27,8 @@ void uart2_test()
     {
         Serial.println("$,UART2,2,FAIL,NO RESPONSE,#"); 
     }
+
+    CHECK_ABORT();
 
 
 

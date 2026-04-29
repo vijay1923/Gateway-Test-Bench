@@ -10,7 +10,6 @@ uint16_t value;    // Variable to store read value
 
 void rs485_test() 
 { 
- 
     Serial2.begin(9600, SERIAL_8N1, RS485_TX, RS485_RX);
     delay(50);
     node.begin(1, Serial2);    // Modbus slave ID 1
@@ -24,9 +23,8 @@ void rs485_test()
     {
         Serial.println("$,RS485,2,FAIL,ERROR CODE : " + String(result) + ",#");
     }
-   
-
-
+    delay(50);
+    Serial2.end();
 }
 
 

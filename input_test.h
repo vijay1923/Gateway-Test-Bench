@@ -48,14 +48,14 @@ void input_test()
                         io_passed[i] = true;
                         completed++;
 
-                        delay(200);  // debounce time
+                        ABORTABLE_DELAY(200);  // debounce time
                     }
                 }
                 CHECK_ABORT(); 
             }
         }
         CHECK_ABORT(); 
-        delay(50);
+        ABORTABLE_DELAY(50);
     }
 
     // Check if timeout occurred

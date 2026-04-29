@@ -26,7 +26,7 @@ void mqtt_test()
     if (mqttClient.connected())   //  Disconnect previous  MQTT connections 
     {
         mqttClient.disconnect();
-        delay(50);
+        ABORTABLE_DELAY(50);
         CHECK_ABORT(); 
     }
 
@@ -47,7 +47,7 @@ void mqtt_test()
         Serial.println(",#");
     }
     CHECK_ABORT(); 
-    delay(200);
+    ABORTABLE_DELAY(200);
      
 }
 

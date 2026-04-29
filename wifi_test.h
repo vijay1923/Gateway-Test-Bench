@@ -18,14 +18,18 @@ void wifi_test()
 
     WiFi.mode(WIFI_STA);  // Set WiFi to station mode
     WiFi.disconnect(true);  // Disconnect from any previous connections
-    delay(1000);
+    ABORTABLE_DELAY(1000);
 
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);  // Connect to the specified SSID
-    delay(1000);
+    ABORTABLE_DELAY(1000);
 
     // Wait for connection with timeout
     unsigned long start = millis();
-    while (WiFi.status() != WL_CONNECTED && millis() - start < WIFI_TIMEOUT) {}  
+    while (WiFi.status() != WL_CONNECTED && millis() - start < WIFI_TIMEOUT)
+    {
+        CHECK_ABORT();
+        ABORTABLE_DELAY(10);
+    }
 
     if (WiFi.status() == WL_CONNECTED)   // Connected successfully
     {
@@ -36,7 +40,7 @@ void wifi_test()
         Serial.println("$,WIFI,2,FAIL,ERROR CODE - " + String(WiFi.status()) + ",#");  // FAIL RESPONSE   
     }
     CHECK_ABORT();  
-    delay(100);  // Short delay for next operations
+    ABORTABLE_DELAY(100);  // Short delay for next operations
 }
 
 #endif

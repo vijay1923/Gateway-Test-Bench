@@ -3,6 +3,125 @@
 volatile char  frame[32];  // string to store received command
 volatile int i = 0;        // frame index  
 volatile bool frameready = false;
+volatile bool abortrequested = false;
+volatile bool abortresponsesent = false;
+volatile bool testrunning = false;
+const char* currenttestname = "NONE";
+
+bool isAbortFrame(String frame)
+{
+    frame.trim();
+    if (!frame.startsWith("$,") || !frame.endsWith(",#"))
+    {
+        return false;
+    }
+
+    frame = frame.substring(2, frame.length() - 2);
+    int commaIndex = frame.indexOf(',');
+    if (commaIndex == -1)
+    {
+        return false;
+    }
+
+    String cmd = frame.substring(0, commaIndex);
+    cmd.toUpperCase();
+
+    return cmd == "ABORT";
+}
+
+void serviceAbortCommand()
+{
+    static char abortFrame[32];
+    static uint8_t abortIndex = 0;
+
+    if (!testrunning)
+    {
+        return;
+    }
+
+    while (Serial.available())
+    {
+        char c = Serial.read();
+
+        if (c == '\r' || c == '\n')
+        {
+            continue;
+        }
+
+        if (abortIndex < sizeof(abortFrame) - 1)
+        {
+            abortFrame[abortIndex++] = c;
+        }
+        else
+        {
+            abortIndex = 0;
+        }
+
+        if (c == '#')
+        {
+            abortFrame[abortIndex] = '\0';
+
+            if (isAbortFrame(String(abortFrame)))
+            {
+                abortrequested = true;
+            }
+
+            abortIndex = 0;
+        }
+    }
+}
+
+bool cooperativeDelay(unsigned long durationMs)
+{
+    unsigned long start = millis();
+
+    while (millis() - start < durationMs)
+    {
+        serviceAbortCommand();
+
+        if (abortrequested)
+        {
+            if (!abortresponsesent)
+            {
+                Serial.print("$,ABORTED,");
+                Serial.print(currenttestname);
+                Serial.println(",#");
+                abortresponsesent = true;
+            }
+            return true;
+        }
+
+        delay(5);
+    }
+
+    return false;
+}
+
+void beginTestExecution()
+{
+    abortrequested = false;
+    abortresponsesent = false;
+    testrunning = true;
+}
+
+void endTestExecution()
+{
+    testrunning = false;
+    currenttestname = "NONE";
+}
+
+void setCurrentTest(const char* testName)
+{
+    currenttestname = testName;
+}
+
+void runTest(const char* testName, void (*testFunction)())
+{
+    beginTestExecution();
+    setCurrentTest(testName);
+    testFunction();
+    endTestExecution();
+}
 
 void parseFrame(String frame ) 
 {
@@ -60,10 +179,11 @@ void cmdhandler(String cmd, int val)
     }
 
     abortrequested = false;
+    abortresponsesent = false;
 
     if (mac_executed == 0)
     {
-        mac_test();
+        runTest("MAC", mac_test);
         mac_executed = 1;
     }
 
@@ -78,50 +198,69 @@ void cmdhandler(String cmd, int val)
     }
 
     if (cmd == "WIFI")
-        wifi_test();
+        runTest("WIFI", wifi_test);
     else if (cmd == "RGB")
-        rgb_test();
+        runTest("RGB", rgb_test);
     else if (cmd == "PCF1")
-        pcf1_test();
+        runTest("PCF1", pcf1_test);
     else if (cmd == "PCF2")
-        pcf2_test();
+        runTest("PCF2", pcf2_test);
     else if (cmd == "INPUT")
-        input_test();
+        runTest("INPUT", input_test);
     else if (cmd == "OUTPUT")
-        output_test();
+        runTest("OUTPUT", output_test);
     else if (cmd == "MAC")
-        mac_test();
+        runTest("MAC", mac_test);
     else if (cmd == "ETHERNET")
-        ethernet_test();
+        runTest("ETHERNET", ethernet_test);
     else if (cmd == "MQTT")
-        mqtt_test();
+        runTest("MQTT", mqtt_test);
     else if (cmd == "RTC")
-        rtc_test();
+        runTest("RTC", rtc_test);
     else if (cmd == "RESET")
-        reset_test();
+        runTest("RESET", reset_test);
     else if(cmd=="SCANNER")
-    scanner_test();
+    runTest("SCANNER", scanner_test);
     else if(cmd=="RS232")
-    rs232_test();
+    runTest("RS232", rs232_test);
     else if(cmd=="RS485")
-    rs485_test();
+    runTest("RS485", rs485_test);
     else if(cmd=="UART2")
-    uart2_test();
+    runTest("UART2", uart2_test);
+    else if(cmd=="FILESYSTEM")
+    runTest("FILESYSTEM", filesystem_test);
     else if (cmd == "ALL") 
     {
-        rgb_test();       CHECK_ABORT();
-        wifi_test();      CHECK_ABORT();
-        mqtt_test();      CHECK_ABORT();
-        rtc_test();       CHECK_ABORT();
-        ethernet_test();  CHECK_ABORT();
-        pcf1_test();      CHECK_ABORT();
-        pcf2_test();      CHECK_ABORT();
-        input_test();     CHECK_ABORT();
-        output_test();    CHECK_ABORT();
-        uart2_test();     CHECK_ABORT();
-        rs232_test();     CHECK_ABORT();
-        rs485_test();     CHECK_ABORT();   
-        reset_test();     CHECK_ABORT();
+        beginTestExecution();
+        setCurrentTest("RGB");
+        rgb_test();        CHECK_ABORT();
+        setCurrentTest("WIFI");
+        wifi_test();       CHECK_ABORT();
+        setCurrentTest("MQTT");
+        mqtt_test();       CHECK_ABORT();
+        setCurrentTest("RTC");
+        rtc_test();        CHECK_ABORT();
+        setCurrentTest("ETHERNET");
+        ethernet_test();   CHECK_ABORT();
+        setCurrentTest("PCF1");
+        pcf1_test();       CHECK_ABORT();
+        setCurrentTest("PCF2");
+        pcf2_test();       CHECK_ABORT();
+        setCurrentTest("INPUT");
+        input_test();      CHECK_ABORT();
+        setCurrentTest("OUTPUT");
+        output_test();     CHECK_ABORT();
+        setCurrentTest("UART2");
+        uart2_test();      CHECK_ABORT();
+        setCurrentTest("RS232");
+        rs232_test();      CHECK_ABORT();
+        setCurrentTest("RS485");
+        rs485_test();      CHECK_ABORT();   
+        setCurrentTest("FILESYSTEM");
+        filesystem_test(); CHECK_ABORT();
+        setCurrentTest("RESET");
+        reset_test();      CHECK_ABORT();
+        endTestExecution();
     }
     else 
     {
@@ -134,7 +273,7 @@ void cmdhandler(String cmd, int val)
 }
 
 // serial receive isr 
-void IRAM_ATTR onSerialReceive() 
+void onSerialReceive() 
 {
     while (Serial.available()) 
     {

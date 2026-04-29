@@ -15,7 +15,7 @@ bool showColor(uint8_t r, uint8_t g, uint8_t b)
 {
     rgb.setPixelColor(0, rgb.Color(r, g, b));
     rgb.show();
-    delay(300);
+    if (cooperativeDelay(300)) return false;
     return true;
 }
 
@@ -53,7 +53,7 @@ void rgb_test()
     // Clear NeoPixel data
     rgb.clear();
     rgb.show();
-    delay(50);
+    ABORTABLE_DELAY(50);
 
     if (pass)
     Serial.println("$,RGB,1,PASS,#");

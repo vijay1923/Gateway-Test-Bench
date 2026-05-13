@@ -9,6 +9,7 @@ void mac_test()
 {
     Serial.println("MAC Address Test Started");
     CHECK_ABORT();
+    bool pass = false;
     uint8_t mac[6]; // Array to hold the MAC address
 
     /*  this api reads the MAC address of the WiFi station interface, 
@@ -18,14 +19,17 @@ void mac_test()
     esp_err_t err = esp_read_mac(mac, ESP_MAC_WIFI_STA);  
     if (err == ESP_OK) // on success print mac address in standard format
     {
-        Serial.print("$,MAC,1,PASS");
+        pass = true;
+        Serial.print("$,MAC,1,PASS,");
         Serial.printf("%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);  // Print MAC in standard format
-        Serial.println("#");
+        Serial.println(",#");
     }
     else
     {
         Serial.println("$,MAC,2,FAIL,#");
     }
+
+    update_test_result(TEST_MAC, pass);
 
     CHECK_ABORT();  
 }

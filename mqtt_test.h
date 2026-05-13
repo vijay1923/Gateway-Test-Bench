@@ -5,6 +5,7 @@
 #include <PubSubClient.h>
 #include "config.h"
 #include "wifi_test.h"
+#include "secrets.h"  // Include secrets for MQTT credentials
 
 #define TEST_BENCH_TOPIC "Gateway/TestBench"   // mqtt topic 
 
@@ -15,11 +16,13 @@ void mqtt_test()
 {
     Serial.println("MQTT Test Started");
     CHECK_ABORT();  
+    bool pass = false;
     if (WiFi.status() != WL_CONNECTED)   // check wifi is connected or not 
     wifi_test();  
     
     if (WiFi.status() != WL_CONNECTED) 
     {
+        update_test_result(TEST_MQTT, false);
         Serial.println("$,MQTT,2,FAIL,NO WIFI,#");
         return;
     }  
@@ -30,12 +33,13 @@ void mqtt_test()
         CHECK_ABORT(); 
     }
 
-    mqttClient.setServer(mqtt_server, mqtt_port); // Configure MQTT broker
+    mqttClient.setServer(MQTT_SERVER, MQTT_PORT); // Configure MQTT broker
     String clientId = "TestBench-" + WiFi.macAddress();  // Use MAC address as unique client ID
-    bool ok = mqttClient.connect(clientId.c_str(), mqtt_user, mqtt_pass); // Connect to MQTT broker
+    bool ok = mqttClient.connect(clientId.c_str(), MQTT_USER, MQTT_PASS); // Connect to MQTT broker
   
     if (ok)
     {
+        pass = true;
         Serial.println("$,MQTT,1,PASS,#");  
         mqttClient.publish(TEST_BENCH_TOPIC, "Gateway Test Bench");  //  Publish topic 
         mqttClient.subscribe(TEST_BENCH_TOPIC);   // subscribe  to same topic 
@@ -46,6 +50,7 @@ void mqtt_test()
         Serial.print(mqttClient.state());  
         Serial.println(",#");
     }
+    update_test_result(TEST_MQTT, pass);
     CHECK_ABORT(); 
     ABORTABLE_DELAY(200);
      

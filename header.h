@@ -30,5 +30,7 @@
 #include "uart2_test.h"
 #include "rs485_test.h"
 #include "filesystem_test.h"
+#include "secrets.h"  // Include secrets at the end to ensure config values are available
+#include "help.h"     // Include help at the end to ensure all commands are defined
 
 #endif

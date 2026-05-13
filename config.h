@@ -87,7 +87,9 @@ enum TestIndex
     TEST_RS485,
     TEST_UART2,
     TEST_FILESYSTEM,
+    TEST_HELP,
     TEST_COUNT
+    
 };
 
 bool test_executed[TEST_COUNT] = {false};

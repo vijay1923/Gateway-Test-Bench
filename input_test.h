@@ -9,6 +9,12 @@ bool io_passed[8] = {false,false,false,false,false,false,false,false};   // bool
 
 void input_test()
 {
+    /// cleaar previous states before new test
+    for (int i = 0; i < 8; i++)
+    {
+        io_passed[i] = false;
+    }
+
     Serial.println("Input test started - Press each button one by one");
     CHECK_ABORT();  // check before test 
 
@@ -69,6 +75,10 @@ void input_test()
             Serial.println(",2,FAIL,BUTTON NOT PRESSED OR INPUT FAULT,#");  // Input not pressed in timeout
         }
     }
+
+    bool pass = (completed == 8);
+    update_test_result(TEST_INPUT, pass);
+
     CHECK_ABORT();  
 }
 

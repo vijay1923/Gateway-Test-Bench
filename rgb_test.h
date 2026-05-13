@@ -59,6 +59,7 @@ void rgb_test()
     Serial.println("$,RGB,1,PASS,#");
     else
     Serial.println("$,RGB,2,FAIL,#");
+    update_test_result(TEST_RGB, pass);
     CHECK_ABORT();  
 }
 

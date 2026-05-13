@@ -1,4 +1,7 @@
 .vscode/
 build/
 dist/
-out/ 
+out/
+
+# Secrets - never commit
+secrets.h

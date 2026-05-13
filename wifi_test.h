@@ -3,16 +3,20 @@
 
 #include <WiFi.h>
 #include "config.h"
+#include "secrets.h"  // Include secrets for Wi-Fi credentials
 
 // Function to START WiFi test
 void wifi_test() 
 {
     Serial.println("WiFi Test Started");
     CHECK_ABORT();  // check before test 
+    bool pass = false;
     // if wifi is already connected skip the test 
     if (WiFi.status() == WL_CONNECTED)
     {
-        Serial.println("$,WIFI,1,PASS,ALREADY CONNECTED TO ," + WiFi.localIP().toString() + ",#");  /// send responce 
+        pass = true;
+        update_test_result(TEST_WIFI, pass);
+        Serial.println("$,WIFI,1,PASS,ALREADY CONNECTED TO IP:" + WiFi.localIP().toString() + ",#");  /// send responce 
         return;
     }
 
@@ -33,12 +37,14 @@ void wifi_test()
 
     if (WiFi.status() == WL_CONNECTED)   // Connected successfully
     {
-        Serial.println("$,WIFI,1,PASS," + WiFi.localIP().toString() + ",#");  /// PASS RESPONSE 
+        pass = true;
+        Serial.println("$,WIFI,1,PASS,IP:" + WiFi.localIP().toString() + ",#");  /// PASS RESPONSE 
     } 
     else   // Failed to connect
     {
         Serial.println("$,WIFI,2,FAIL,ERROR CODE - " + String(WiFi.status()) + ",#");  // FAIL RESPONSE   
     }
+    update_test_result(TEST_WIFI, pass);
     CHECK_ABORT();  
     ABORTABLE_DELAY(100);  // Short delay for next operations
 }

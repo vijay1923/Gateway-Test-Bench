@@ -54,6 +54,8 @@ void scanner_test()
         Serial.println("$,SCANNER,2,FAIL,#");
     }
 
+    update_test_result(TEST_SCANNER, scanReceived);
+
    CHECK_ABORT();  
 }
 

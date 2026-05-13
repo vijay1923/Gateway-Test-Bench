@@ -1,109 +1,151 @@
-## 🚜 ESP32 Peripheral BenchTest 
+# ESP32-S3 Peripheral Test Bench
 
-### 📖 Overview
+## Overview
 
-This project is a lightweight lab/test harness for an ESP32-S3 that exercises common peripherals (WiFi, Ethernet, MQTT, PCF8574 I/O, RGB LEDs, RTC, MAC, inputs/outputs, etc.).
+This project is an ESP32-S3 hardware validation sketch for production/lab testing.
+It exposes a serial command interface to run peripheral tests and returns structured
+PASS/FAIL responses for automation.
 
-Control is via a small serial command protocol (suitable for human use or automated rigs). The device prints structured responses you can parse from a host machine.
+Core capabilities include:
 
-### 📚 Libraries Used
+- Wi-Fi connectivity
+- MQTT broker connection
+- Ethernet (DHCP + link)
+- PCF8574 detection (`PCF1`, `PCF2`)
+- Digital input/output loop checks through PCF expanders
+- RGB (WS2812) LED sequence
+- MAC address read
+- RTC + NTP synchronization check
+- USB scanner callback test
+- UART2 loopback style check
+- RS485 Modbus read check
+- SPIFFS filesystem write/read validation
+- Reset/restart validation
+- Test abort during long-running checks
 
-| Library Name       | Purpose                                          |
-|--------------------|--------------------------------------------------|
-| `WiFi`             | WiFi connectivity                                |
-| `PubSubClient`     | MQTT client when testing MQTT connectivity       |
-| `Wire`             | I2C for PCF8574 tests                            | 
-| `Adafruit_NeoPixel`| WS2812 / RGB control                             |
-| `Ethernet`         | Ethernet connectivity                            |
-| `RTClib`           | Real-time clock (RTC) functionality              |
-| `Adafruit_BusIO`   | I2C/SPI abstraction layer (Adafruit utility)     |
-| `EEPROM`           | ESP32 EEPROM for data persistence                |
-| `usb_scanner_Lib`  | USB barcode scanner interface                    |
-| `Arduino`          | Core Arduino APIs                                |
+## Serial command protocol
 
+### Command format
 
-### 📁 File Structure & Description
+All incoming commands must match:
 
-| File                         | Purpose                                         |
-|------------------------------|-------------------------------------------------|
-| `periferal_testing.ino`      | Main sketch: serial loop, boot messages         |
-| `header.h`                   | Main header: includes all libraries and tests    |
-| `config.h`                   | Pins, WiFi/MQTT settings, I2C addresses         |
-| `wifi_test.h`                | WiFi connectivity test                          |
-| `mqtt_test.h`                | MQTT connect/publish test                       |
-| `ethernet_test.h`            | Ethernet connectivity test                      |
-| `pcf_test.h`                 | PCF8574 I/O expander test                       |
-| `rgb_test.h`                 | WS2812 RGB LED test                             |
-| `input_test.h`               | Input pins test                                 |
-| `output_test.h`              | Output pins test                                |
-| `mac_test.h`                 | MAC address test                                |
-| `rtc_test.h`                 | Real-time clock test                            |
-| `scanner_test.h`             | Barcode scanner test                            |
-| `reset_test.h`               | EEPROM reset/restart test                       |
-| `rs232_test.h`               | RS232 serial communication test                 |
-| `rs485_test.h`               | RS485 serial communication test                 |
-
-### 🔁 Serial Command Protocol
-
-Commands are single-line and terminated with `#`.
-
-Format:
-
-```
-$<PERIPHERAL>,<ACTION>#
-
-```
-
-- `PERIPHERAL`: e.g. `WIFI`, `MQTT`, `OUTTEST`, `MAC`, `PCF`.
-- `ACTION`: integer action code (typically `1` = start/test, `2` = stop).
+`$,<COMMAND>,<VALUE>,#`
 
 Examples:
 
-```
-$<WIFI>,<1>#       // start WiFi test
-$<MQTT>,<1>#       // run MQTT connect test
-$<ETHERNET>,<1>#   // start Ethernet test
-$<PCF>,<1>#        // run PCF8574 I/O test
-$<RGB>,<1>#        // run RGB LED test
-$<INPUT>,<1>#      // run input pins test
-$<OUTPUT>,<1>#     // run output pins test
-$<MAC>,<1>#        // run MAC address test
-$<RTC>,<1>#        // run RTC test
-$<SCANNER>,<1>#    // run barcode scanner test
-$<RESET>,<1>#      // run reset test
-$<RS232>,<1>#      // run RS232 test
-$<RS485>,<1>#      // run RS485 test
-```
+- `$,WIFI,1,#`
+- `$,MQTT,1,#`
+- `$,ALL,1,#`
+- `$,SUMMARY,1,#`
+- `$,ABORT,1,#`
 
-### 🖨️ Serial Output — Example
+Notes:
 
-The sketch prints human- and machine-readable logs:
+- `<COMMAND>` is case-insensitive in firmware.
+- `<VALUE>` must be numeric (`1` or `2` accepted by parser).
+- Frames not matching the format are rejected.
 
-```
-Welcome ESP32-S3 Peripheral BenchTest
-...
-$<WIFI>,<1>,<CONNECTED TO 192.168.1.42>#
-$<MQTT>,<1>,<MQTT SERVER CONNECTED,0>#
-$<PCF>,<1>,<INPUTS: 0x12>#
-```
+### Abort behavior
 
-### 📋 Command & Response Reference Table
+While a test is running, send:
 
-| Peripheral  | Commands          | Pass Response                     | Fail Response                     |
-|-------------|-------------------|-----------------------------------|-----------------------------------|
-| WiFi        | `$<WIFI>,<1>#`    | `$<WIFI>,<1>,<PASS,MESSAGE>#`     | `$<WIFI>,<2>,<FAIL,MESSAGE>#`     |
-| MQTT        | `$<MQTT>,<1>#`    | `$<MQTT>,<1>,<PASS,MESSAGE>#`     | `$<MQTT>,<2>,<FAIL,MESSAGE>#`     |
-| Ethernet    | `$<ETHERNET>,<1>#`| `$<ETHERNET>,<1>,<PASS,MESSAGE>#` | `$<ETHERNET>,<2>,<FAIL,MESSAGE>#` |
-| PCF8574  1  | `$<PCF1>,<1>#`    | `$<PCF1>,<1>,<PASS,MESSAGE>#`     | `$<PCF1>,<2>,<FAIL,MESSAGE>#`     |
-| PCF8574  2  | `$<PCF2>,<1>#`    | `$<PCF2>,<1>,<PASS,MESSAGE>#`     | `$<PCF2>,<2>,<FAIL,MESSAGE>#`     |
-| RGB LED     | `$<RGB>,<1>#`     | `$<RGB>,<1>,<PASS,MESSAGE>#`      | `$<RGB>,<2>,<FAIL,MESSAGE>#`      |
-| Input Pins  | `$<INPUT>,<1>#`   | `$<INPUT>,<1>,<PASS,MESSAGE>#`    | `$<INPUT>,<2>,<FAIL,MESSAGE>#`    |
-| Output Pins | `$<OUTPUT>,<1>#`  | `$<OUTPUT>,<1>,<PASS,MESSAGE>#`   | `$<OUTPUT>,<2>,<FAIL,MESSAGE>#`   |
-| MAC Address | `$<MAC>,<1>#`     | `$<MAC>,<1>,<PASS,MESSAGE>#`      | `$<MAC>,<2>,<FAIL,MESSAGE>#`      |
-| RTC         | `$<RTC>,<1>#`     | `$<RTC>,<1>,<PASS,MESSAGE>#`      | `$<RTC>,<2>,<FAIL,MESSAGE>#`      |
-| Scanner     | `$<SCANNER>,<1>#` | `$<SCANNER>,<1>,<PASS,MESSAGE>#`  | `$<SCANNER>,<2>,<FAIL,MESSAGE>#`  |
-| Reset       | `$<RESET>,<1>#`   | `$<RESET>,<1>,<PASS,MESSAGE>#`    | `$<RESET>,<2>,<FAIL,MESSAGE>#`    |
-| RS232       | `$<RS232>,<1>#`   | `$<RS232>,<1>,<PASS,MESSAGE>#`    | `$<RS232>,<2>,<FAIL,MESSAGE>#`    |
-| RS485       | `$<RS485>,<1>#`   | `$<RS485>,<1>,<PASS,MESSAGE>#`    | `$<RS485>,<2>,<FAIL,MESSAGE>#`    |
+`$,ABORT,1,#`
 
----
+When accepted, firmware returns:
+
+`$,ABORTED,<CURRENT_TEST>,#`
+
+## Supported commands
+
+| Command | Purpose |
+|---|---|
+| `WIFI` | Run Wi-Fi connect test |
+| `MQTT` | Run MQTT connect/publish test (requires Wi-Fi) |
+| `ETHERNET` | Run Ethernet DHCP/link test |
+| `PCF1` | Detect PCF8574 at input address |
+| `PCF2` | Detect PCF8574 at output address |
+| `INPUT` | Validate 8 input channels via PCF1 |
+| `OUTPUT` | Validate 8 output channels via PCF2/PCF1 feedback |
+| `RGB` | Run RGB LED color sequence |
+| `MAC` | Read ESP32 MAC address |
+| `RTC` | Sync NTP and verify RTC progression |
+| `SCANNER` | Wait for barcode scan callback |
+| `UART2` | UART2 send/receive check |
+| `RS232` | Placeholder test (currently reports FAIL) |
+| `RS485` | Modbus holding register read check |
+| `FILESYSTEM` | SPIFFS write/read consistency test |
+| `RESET` | EEPROM-armed restart test |
+| `HELP` | Print list of available commands |
+| `SUMMARY` | Return one-line status for all tests (`0` not run, `1` pass, `2` fail) |
+| `ALL` | Execute full sequence of major tests |
+
+## Typical response format
+
+Most test results follow:
+
+`$,<COMMAND>,<1|2>,<PASS|FAIL>,<DETAILS>,#`
+
+Where:
+
+- `1` typically indicates PASS
+- `2` typically indicates FAIL
+
+Some tests emit per-channel results (for example `INPUT`/`OUTPUT`) with `IN` or `OUT`
+labels and pin index.
+
+### Summary response format
+
+`SUMMARY` returns a single line in test-index order:
+
+`$,SUMMARY,<S1>,<S2>,...,<SN>,#`
+
+Status code meaning:
+
+- `0` = Not executed
+- `1` = PASS
+- `2` = FAIL
+
+This format is intended for production jigs and host scripts (easy to parse and fixed order).
+
+## Project file map
+
+| File | Purpose |
+|---|---|
+| `periferal_testing.ino` | Main parser, command dispatcher, abort handling, setup/loop |
+| `config.h` | Pin map, Wi-Fi/MQTT/RTC settings, test constants |
+| `secrets.h` | Local-only credentials (`.gitignore` protected) |
+| `secrets.h.example` | Template for configuring local credentials |
+| `header.h` | Central include aggregator |
+| `wifi_test.h` | Wi-Fi test implementation |
+| `mqtt_test.h` | MQTT test implementation |
+| `ethernet_test.h` | Ethernet test implementation |
+| `pcf_test.h` | PCF1/PCF2 scan tests |
+| `input_test.h` | Input verification flow |
+| `output_test.h` | Output verification flow |
+| `rgb_test.h` | RGB LED test and init |
+| `mac_test.h` | MAC read test |
+| `rtc_test.h` | RTC/NTP test |
+| `scanner_test.h` | USB scanner callback test |
+| `uart2_test.h` | UART2 test |
+| `rs232_test.h` | RS232 test (current placeholder behavior) |
+| `rs485_test.h` | RS485/Modbus test |
+| `filesystem_test.h` | SPIFFS filesystem test |
+| `reset_test.h` | Reset/EEPROM test init and execution |
+
+## Build & flash
+
+This sketch is structured for Arduino ESP32 (ESP32-S3 target) and can be built/flashed
+using Arduino IDE or Arduino CLI with the appropriate ESP32 board package.
+
+## Important configuration note
+
+Credentials are now separated from `config.h`:
+
+- `secrets.h` stores local Wi-Fi/MQTT credentials (ignored by git).
+- `secrets.h.example` is the shareable template committed to the repository.
+
+For a new setup:
+
+1. Copy `secrets.h.example` to `secrets.h`
+2. Fill your real credentials in `secrets.h`
+3. Build and flash

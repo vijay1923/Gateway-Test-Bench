@@ -12,6 +12,7 @@ void rtc_test()
 {
     Serial.println("RTC Test Started");
      CHECK_ABORT();
+    bool pass = false;
     if (WiFi.status() != WL_CONNECTED) 
         wifi_test();  
 
@@ -20,7 +21,9 @@ void rtc_test()
 
     if (!rtc.begin())
     {
+        update_test_result(TEST_RTC, false);
         Serial.println("$,RTC,2,FAIL,RTC NOT DETECTED,#");
+        Serial.println("Try With Appropriate I2C Pins or Check RTC Connection");
         return;
     }
 
@@ -30,6 +33,7 @@ void rtc_test()
 
     if (!getLocalTime(&timeinfo)) 
     {
+        update_test_result(TEST_RTC, false);
         Serial.println("$,RTC,2,FAIL,NTP SERVER,#");
         return;
     }
@@ -55,9 +59,14 @@ void rtc_test()
     if (diff < 0) diff += 60;
 
     if (diff >= 5) // respond passs with current time
+    {
+    pass = true;
     Serial.printf("$,RTC,1,PASS,%02d:%02d:%02d,#\n",t2.hour(), t2.minute(), t2.second());
+    }
     else
     Serial.println("$,RTC,2,FAIL,RTC NOT WORKING,#");
+
+    update_test_result(TEST_RTC, pass);
 
     CHECK_ABORT(); 
     ABORTABLE_DELAY(100);

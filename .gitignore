@@ -3,5 +3,5 @@ build/
 dist/
 out/
 
-# Secrets - never commit
+# Secrets
 secrets.h

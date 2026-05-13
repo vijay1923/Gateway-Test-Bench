@@ -35,6 +35,8 @@ void pcf1_test()
     else
     Serial.println("$,PCF1,2,FAIL,#");
 
+    update_test_result(TEST_PCF1, foundPCF1);
+
     CHECK_ABORT(); 
     ABORTABLE_DELAY(100);     
 }
@@ -65,6 +67,9 @@ void pcf2_test()
     Serial.printf("$,PCF2,1,PASS,0x%02X,#\n", addr);
     else
     Serial.println("$,PCF2,2,FAIL,#");
+
+    update_test_result(TEST_PCF2, foundPCF2);
+
     CHECK_ABORT();
     ABORTABLE_DELAY(100);  
 }

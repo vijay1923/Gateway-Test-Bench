@@ -23,12 +23,14 @@ void reset_test()
     byte state = EEPROM.read(RESET_EEPROM_ADDR);
     if (state == RESET_ARMED)   // if prior state is armed then reset 
     {
+        update_test_result(TEST_RESET, true);
         Serial.println("$,RESET,1,PASS,#");
         ABORTABLE_DELAY(400);
         ESP.restart();
     }
     else
     {
+        update_test_result(TEST_RESET, false);
         Serial.println("$,RESET,2,FAIL,#");
     }
     CHECK_ABORT();  

@@ -5,6 +5,7 @@
 
 void print_help()
 {
+    update_test_result(TEST_HELP, true);
     Serial.println("Available Commands:");
     Serial.println("1. WIFI - Test Wi-Fi connectivity | Command : $,WIFI,1,#");  
     Serial.println("2. MQTT - Test MQTT connectivity | Command : $,MQTT,1,#");
@@ -22,8 +23,8 @@ void print_help()
     Serial.println("14. UART2 - Test UART2 communication | Command : $,UART2,1,#");
     Serial.println("15. RS485 - Test RS485 communication | Command : $,RS485,1,#");
     Serial.println("16. FILESYSTEM - Test SPIFFS and LittleFS functionality | Command : $,FILESYSTEM,1,#");
+    Serial.println("17. SUMMARY - One-line status for all tests | Command : $,SUMMARY,1,#");
 }
-
 
 
 #endif

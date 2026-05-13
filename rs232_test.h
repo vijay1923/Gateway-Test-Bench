@@ -9,6 +9,7 @@ void rs232_test()
     // Serial.println("RS232 Test Started");
 
      CHECK_ABORT();  // check before test   
+    update_test_result(TEST_RS232, false);
      Serial.println("$,RS232,2,FAIL,#"); 
 
 }

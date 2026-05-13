@@ -17,6 +17,7 @@ void output_test()
     ABORTABLE_DELAY(100);
 
     bool io_passed[8] = {false,false,false,false,false,false,false,false};  // Track passed outputs
+    bool pass = true;
 
     unsigned long startTime = millis();
 
@@ -57,6 +58,7 @@ void output_test()
         
         if (!received)
         {
+            pass = false;
             Serial.print("$,OUT,");
             Serial.print(i);
             Serial.println(",2,FAIL,#");
@@ -69,6 +71,9 @@ void output_test()
     Wire.beginTransmission(PCF2_ADDR);   // pcf2 of output expander
     Wire.write(0x00);  // all outputs LOW
     Wire.endTransmission();
+
+    update_test_result(TEST_OUTPUT, pass);
+
     CHECK_ABORT();  
 }
 

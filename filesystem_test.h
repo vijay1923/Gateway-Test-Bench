@@ -8,9 +8,11 @@
 void filesystem_test() 
 {
     CHECK_ABORT();  // check before test
+    bool pass = false;
 
     if (!SPIFFS.begin(true)) 
     {
+        update_test_result(TEST_FILESYSTEM, false);
         Serial.println("$,FILESYSTEM,2,SPIFFS FAIL,Failed to mount SPIFFS,#");
         return;
     }
@@ -19,6 +21,7 @@ void filesystem_test()
     File file = SPIFFS.open(SPIFFS_TEST_FILE, FILE_WRITE);
     if (!file) 
     {
+        update_test_result(TEST_FILESYSTEM, false);
         Serial.println("$,FILESYSTEM,2,SPIFFS FAIL,Failed to create file,#");
         return;
     }
@@ -29,6 +32,7 @@ void filesystem_test()
     file = SPIFFS.open(SPIFFS_TEST_FILE);
     if (!file) 
     {
+        update_test_result(TEST_FILESYSTEM, false);
         Serial.println("$,FILESYSTEM,2,SPIFFS FAIL,Failed to open file for reading,#");
         return;
     }
@@ -39,12 +43,14 @@ void filesystem_test()
 
     if (content == SPIFFS_TEST_CONTENT) 
     {
+        pass = true;
         Serial.println("$,FILESYSTEM,1,SPIFFS PASS,#");
     } 
     else 
     {
         Serial.println("$,FILESYSTEM,2,SPIFFS FAIL,File content mismatch,#");
     }
+    update_test_result(TEST_FILESYSTEM, pass);
     ABORTABLE_DELAY(50);
     SPIFFS.end();
 

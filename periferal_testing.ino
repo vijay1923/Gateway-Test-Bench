@@ -1,13 +1,5 @@
 #include "header.h" 
 
-volatile char  frame[32];  // string to store received command
-volatile int i = 0;        // frame index  
-volatile bool frameready = false;
-volatile bool abortrequested = false;
-volatile bool abortresponsesent = false;
-volatile bool testrunning = false;
-const char* currenttestname = "NONE";
-
 bool isAbortFrame(String frame)
 {
     frame.trim();
@@ -122,6 +114,22 @@ void runTest(const char* testName, void (*testFunction)())
     testFunction();
     endTestExecution();
 }
+void sendSummary()
+{
+    Serial.print("$,SUMMARY");
+    for (int idx = 0; idx < TEST_COUNT; idx++)
+    {
+        int statusCode = 0;
+        if (test_executed[idx])
+        {
+            statusCode = test_result[idx] ? 1 : 2;
+        }
+
+        Serial.print(",");
+        Serial.print(statusCode);
+    }
+    Serial.println(",#");
+}
 
 void parseFrame(String frame ) 
 {
@@ -229,8 +237,11 @@ void cmdhandler(String cmd, int val)
     runTest("UART2", uart2_test);
     else if(cmd=="FILESYSTEM")
     runTest("FILESYSTEM", filesystem_test);
+    else if (cmd == "SUMMARY")
+        sendSummary();
     else if (cmd == "ALL") 
     {
+        Serial.println("Running All Tests");
         beginTestExecution();
         setCurrentTest("RGB");
         rgb_test();        CHECK_ABORT();
@@ -299,12 +310,14 @@ void onSerialReceive()
 void setup() 
 {
     Serial.begin(SERIAL_BAUD);
+    Serial.println("Welcome ESP32-S3 : Gateway BenchTest");
+    Serial.println("Initializing peripherals...");
     delay(2000); 
 
     rgb_init();          // initialize RGB
     reset_test_init();   // initialize reset test
 
-    Serial.println("Welcome ESP32-S3 : Gateway BenchTest");
+    Serial.println("Initialization complete. Awaiting commands...");
 }
 
 void loop() 

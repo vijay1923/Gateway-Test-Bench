@@ -322,6 +322,7 @@ void setup()
 
 void loop() 
 {
+    /*  || श्री || */
     onSerialReceive(); // poll serial input (USB CDC has no onReceive callback)
 
     if (frameready)

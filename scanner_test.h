@@ -7,6 +7,7 @@
 bool scanReceived = false;  
 String lastBarcode = "";
 int lastLen = 0;
+bool scannerUsbInitialized = false;
 // callback function to handle scanned barcode
 void onBarcodeScanned(const char *barcode, int length)
 {
@@ -25,10 +26,14 @@ void scanner_test()
    
     CHECK_ABORT();  
     scanReceived = false;
-    lastBarcode  = "";
+    lastBarcode  = ""; 
     lastLen      = 0;
 
-    usb_scannerInit();
+    if (!scannerUsbInitialized)
+    {
+        usb_scannerInit();
+        scannerUsbInitialized = true;
+    }
     set_barcode_callback(onBarcodeScanned);
 
     unsigned long start = millis();

@@ -13,8 +13,8 @@ void rs485_test()
     bool pass = false;
     Serial2.begin(9600, SERIAL_8N1, RS485_TX, RS485_RX);
     delay(50);
-    node.begin(1, Serial2);    // Modbus slave ID 1
-    result = node.readHoldingRegisters(0, 1);   // Read 1 register starting at address 0
+    node.begin(Serial2);    // Modbus serial port
+    result = node.readHoldingRegisters(1, 0, 1);   // Slave ID 1, read 1 register starting at address 0
     if(result == node.ku8MBSuccess)
     {
         pass = true;

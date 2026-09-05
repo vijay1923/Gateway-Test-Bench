@@ -7,6 +7,7 @@
 
 void filesystem_test() 
 {
+    Serial.println("FILESYSTEM Test Started");
     CHECK_ABORT();  // check before test
     bool pass = false;
 
@@ -15,6 +16,7 @@ void filesystem_test()
         update_test_result(TEST_FILESYSTEM, false);
         Serial.println("$,FILESYSTEM,2,SPIFFS FAIL,Failed to mount SPIFFS,#");
         return;
+
     }
 
     // Create a test file
@@ -44,7 +46,27 @@ void filesystem_test()
     if (content == SPIFFS_TEST_CONTENT) 
     {
         pass = true;
-        Serial.println("$,FILESYSTEM,1,SPIFFS PASS,#");
+
+        // Free RAM
+        // Serial.print("Free heap: ");
+        // Serial.print(ESP.getFreeHeap());
+        // Serial.println(" bytes");
+
+        // Serial.print("Largest allocatable block: ");
+        // Serial.print(ESP.getMaxAllocHeap());
+        // Serial.println(" bytes");
+
+        // Free SPIFFS storage
+        // size_t freeFlash = SPIFFS.totalBytes() - SPIFFS.usedBytes();
+
+        // Serial.print("SPIFFS free: ");
+        // Serial.print(freeFlash);
+        // Serial.println(" bytes");
+
+        Serial.print("$,FILESYSTEM,1,SPIFFS PASS,");
+        
+        // Serial.print(freeFlash);
+        // Serial.println(" bytes,#");
     } 
     else 
     {
